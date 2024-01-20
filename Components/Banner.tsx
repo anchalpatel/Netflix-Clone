@@ -1,35 +1,61 @@
-
-import { Movie } from '@/tyscript'
-import requests from '@/utils/requests';
-import React, { useState } from 'react'
+"use client";
+import { baseUrl } from "@/Constants/movie";
+import { Movie } from "@/tyscript";
+import requests from "@/utils/requests";
+import { InformationCircleIcon } from "@heroicons/react/16/solid";
+import React, { useEffect, useState } from "react";
+import { FaPlay } from "react-icons/fa";
 
 interface BannerProps {
-    netflixOriginals : Movie[];
+  netflixOriginals: Movie[];
 }
 
-function Banner({netflixOriginals} : BannerProps) {
-    console.log(netflixOriginals);
-    const [movie, setMovie] = useState<Movie | null>(null);
+function Banner({ netflixOriginals }: BannerProps) {
+  //console.log("fetchNetflixOriginals:", netflixOriginals);
+  const [movie, setMovie] = useState<Movie | null>(null);
 
-    useEffect(()=>{
-        setMovie(netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)]);
-    }, [netflixOriginals])
+  useEffect(() => {
+    
+      setMovie(
+        netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)]
+      );
+    
+  }, [netflixOriginals]);
 
-    console.log(movie);
+  console.log(movie);
   return (
-    <div>Banner</div>
-  )
+    <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12">
+    <div className="absolute top-0 left-0 -z-10 h-[95vh] w-screen">
+      <img
+        src={`${baseUrl}${movie?.backdrop_path || movie?.poster_path}`}
+        className=" object-cover"
+      />
+    </div>
+
+    <h1 className="text-2xl font-bold md:text-4xl lg:text-5xl">
+      {movie?.title || movie?.name || movie?.original_name}
+    </h1>
+    <p className="max-w-xs text-xs text-shadow-md md:max-w-lg md:text-lg lg:max-w-2xl lg:text-xl">
+      {movie?.overview.length >350 ? movie?.overview.substring(0, 350): movie?.overview}
+    </p>
+
+    <div className="flex space-x-3">
+      <button className="bannerButton bg-white text-black">
+        <FaPlay className="h-3 w-3 text-black md:h-4 md:w-4" /> Play
+      </button>
+      <button
+        className="bannerButton bg-[gray]/70"
+        // onClick={() => {
+        //   setCurrentMovie(movie)
+        //   setShowModal(true)
+        // }}
+      >
+        More Info <InformationCircleIcon className="h-3 w-3 md:h-5 md:w-5" />
+      </button>
+    </div>
+  </div>
+  );
 }
 
-export default Banner
-export const getServerSideProps = (async () => {
-  // Fetch data from external API
-  const res = await fetch(requests.fetchTrending).then((res) => res.json())
-  const netflixOriginals = await res.json()
-  // Pass data to the page via props
-  return { props: { netflixOriginals } }
-}) 
+export default Banner;
 
-function useEffect(arg0: () => void, arg1: Movie[][]) {
-  throw new Error('Function not implemented.');
-}

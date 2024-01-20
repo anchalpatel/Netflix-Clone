@@ -1,11 +1,14 @@
-"use client";
+
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+
 import Banner from '../Components/Banner'
 import Header from '../Components/Header'
-import { Movie } from '@/tyscript'
+
+import { Movie } from '../tyscript'
 import requests from '../utils/requests'
 
+import { useEffect, useState } from 'react'
+import Row from '@/Components/Row'
 
 interface Props {
   netflixOriginals: Movie[]
@@ -16,101 +19,73 @@ interface Props {
   horrorMovies: Movie[]
   romanceMovies: Movie[]
   documentaries: Movie[]
-  
+  //products: Product[]
 }
 
-function Home() {
-  // const [netflixOriginals, setNetflixOriginals] = useState<Movie[]>([]);
-  // const [trendingNow, setTrendingNow] = useState<Movie[] >([]);
-  // const [topRated, setTopRated] = useState<Movie[]>([]);
-  // const [actionMovies, setActionMovies] = useState<Movie[]>([]);
-  // const [comedyMovies, setComedyMovies] = useState<Movie[]>([]);
-  // const [horrorMovies, setHorrorMovies] = useState<Movie[]>([]);
+async function getData() {
+ 
+  const [
+    netflixOriginals,
+    trendingNow,
+    topRated,
+    actionMovies,
+    comedyMovies,
+    horrorMovies,
+    romanceMovies,
+    documentaries,
+  ] = await Promise.all([
+    fetch(requests.fetchNetflixOriginals).then((res) => res.json()),
+    fetch(requests.fetchTrending).then((res) => res.json()),
+    fetch(requests.fetchTopRated).then((res) => res.json()),
+    fetch(requests.fetchActionMovies).then((res) => res.json()),
+    fetch(requests.fetchComedyMovies).then((res) => res.json()),
+    fetch(requests.fetchHorrorMovies).then((res) => res.json()),
+    fetch(requests.fetchRomanceMovies).then((res) => res.json()),
+    fetch(requests.fetchDocumentaries).then((res) => res.json()),
+  ])
 
-  // const [romanceMovies, setRomanticMovies] = useState<Movie[]>([]);
-  // const [documentaries, setDocumentries] = useState<Movie[]>([]);
+  return (
+    {
+      netflixOriginals: netflixOriginals.results,
+      trendingNow: trendingNow.results,
+      topRated: topRated.results,
+      actionMovies: actionMovies.results,
+      comedyMovies: comedyMovies.results,
+      horrorMovies: horrorMovies.results,
+      romanceMovies: romanceMovies.results,
+      documentaries: documentaries.results,
 
-  // const dataFetch = async () => {
-  //   await fetch(requests.fetchNetflixOriginals)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     setNetflixOriginals(data)
-  //     //setLoading(false)
-  //   })
+    }
+  )
+}
+ 
 
-  //   await fetch(requests.fetchTrending)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     setTrendingNow(data)
-  //     //setLoading(false)
-  //   })
 
-  //   await fetch(requests.fetchTopRated)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     setTopRated(data)
-  //     //setLoading(false)
-  //   })
 
-  //   await fetch(requests.fetchActionMovies)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     setActionMovies(data)
-  //     //setLoading(false)
-  //   })
-  //   await fetch(requests.fetchComedyMovies)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     setComedyMovies(data)
-  //     //setLoading(false)
-  //   })
-  //   await fetch(requests.fetchHorrorMovies)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     setHorrorMovies(data)
-  //     //setLoading(false)
-  //   })
-  //   await fetch(requests.fetchDocumentaries)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     setDocumentries(data)
-  //     //setLoading(false)
-  //   })
-  //   await fetch(requests.fetchRomanceMovies)
-  //   .then((res) => res.json())
-  //   .then((data) => {
-  //     setRomanticMovies(data)
-  //     //setLoading(false)
-  //   })
+const Home = async() => {
+  const movieData = await getData();
 
-  // }
-  
-  // useEffect(() => {
-  //   dataFetch();
-  // }, []);
-  
-  console.log("Netflix originals : ", netflixOriginals);
   return (
     <div className={`relative h-screen bg-gradient-to-b lg:h-[140vh]`}>
       <Head>
         <title>Home - Netflix</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Header></Header>
 
-      <main>
-        <Banner netflixOriginals={netflixOriginals}></Banner>
-        <section>
-          {}
-          {}
-          {}
-          {}
-          
-          {}
-          {}
+      <Header></Header>
+      <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
+        <Banner netflixOriginals={movieData.netflixOriginals} />
+        <section className=' space-y-20'>
+          <Row title='Treanding Now' movie={movieData.trendingNow}></Row>
+          <Row title='Top Rated' movie={movieData.topRated}></Row>
+          <Row title='Action Movies' movie={movieData.actionMovies}></Row>
+          <Row title='Comedy Movies' movie={movieData.comedyMovies}></Row>
+          <Row title='Horror Movies' movie={movieData.horrorMovies}></Row>
+          <Row title='Romance Movies' movie={movieData.romanceMovies}></Row>
+          <Row title='Documentries' movie={movieData.documentaries}></Row>
         </section>
       </main>
-
+      {/* {showModal && <Modal />} */}
     </div>
   )
 }
