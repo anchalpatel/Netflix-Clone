@@ -3,10 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { MdOutlineSearch } from 'react-icons/md'
 import {BellIcon} from '@heroicons/react/16/solid'
 import Link from 'next/link'
+import useAuth from '@/Hooks/useAuth';
 
 function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
-
+  const {logout} = useAuth();
   const handleScroll = () => {
     if(window.scrollY>0){
       setIsScrolled(true);
@@ -49,13 +50,14 @@ function Header() {
           <MdOutlineSearch className="hidden h-6 w-6 sm:inline" />
           <p className="hidden lg:inline">Kids</p>
           <BellIcon className="h-6 w-6"  />
-          <Link href="/account">
+          {/* <Link href="/account"> */}
             <img
               src="https://rb.gy/g1pwyx"
               alt=""
               className="cursor-pointer rounded"
+              onClick={logout}
             />
-          </Link>
+          {/* </Link> */}
         </div>
       </header>
   )

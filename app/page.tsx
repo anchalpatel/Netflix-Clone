@@ -1,14 +1,16 @@
 
+"use client"
 import Head from 'next/head'
-
 import Banner from '../Components/Banner'
 import Header from '../Components/Header'
-
 import { Movie } from '../tyscript'
 import requests from '../utils/requests'
-
-import { useEffect, useState } from 'react'
 import Row from '@/Components/Row'
+import useAuth from '@/Hooks/useAuth'
+import { useRecoilValue } from 'recoil'
+import { modalState } from '@/atoms/ModalAtom'
+import Modal from '@/Components/Modal'
+
 
 interface Props {
   netflixOriginals: Movie[]
@@ -64,7 +66,9 @@ async function getData() {
 
 const Home = async() => {
   const movieData = await getData();
-
+  const {loading} = useAuth();
+  const showModal = useRecoilValue(modalState)
+  
   return (
     <div className={`relative h-screen bg-gradient-to-b lg:h-[140vh]`}>
       <Head>
@@ -85,7 +89,10 @@ const Home = async() => {
           <Row title='Documentries' movie={movieData.documentaries}></Row>
         </section>
       </main>
-      {/* {showModal && <Modal />} */}
+      {
+        showModal && <Modal></Modal>
+      }
+
     </div>
   )
 }
