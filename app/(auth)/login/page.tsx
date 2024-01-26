@@ -82,17 +82,17 @@ function login() {
       >
         Sign In
       </button>
-    </form>
-    <div className="text-[gray]">
-        New to Netflix?{' '}
-        <button
-          type="submit"
-          className="text-white hover:underline"
-          onClick={() => setLogin(false)}
-        >
-          Sign up now
-        </button>
+      <div className="text-[gray]">
+          New to Netflix?{' '}
+          <button
+            type="submit"
+            className="text-white hover:underline"
+            onClick={() => setLogin(false)}
+          >
+            Sign up now
+          </button>
       </div>
+    </form>
     </div>
   )
 }

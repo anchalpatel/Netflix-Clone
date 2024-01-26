@@ -1,3 +1,4 @@
+//"use server"
 import { Movie } from '@/tyscript'
 import requests from '@/utils/requests'
 import React from 'react'
@@ -16,7 +17,7 @@ interface Props {
     //products: Product[]
   }
   
-
+  
   async function getData() {
  
     const [
@@ -55,6 +56,8 @@ interface Props {
   }
    
 async function MainSection() {
+  
+ 
     const movieData = await getData();
   return (
     <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
@@ -73,3 +76,5 @@ async function MainSection() {
 }
 
 export default MainSection
+
+
